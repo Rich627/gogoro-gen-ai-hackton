@@ -43,7 +43,7 @@ RAG_THRESHOLD = float(os.environ.get("RAG_THRESHOLD", 0.5))
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--ask", type=str, default="What is the meaning of <3?")
-    parser.add_argument("--index", type=str, default="movies")
+    parser.add_argument("--index", type=str, default="shiun")
     parser.add_argument("--region", type=str, default="us-east-1")
     parser.add_argument(
         "--bedrock-model-id",
