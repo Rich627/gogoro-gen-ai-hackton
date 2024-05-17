@@ -203,3 +203,7 @@ def main(query: str, chat_history: List[Dict[str, Any]]):
     )
 
     return response.get("answer")
+
+
+if __name__ == "__main__":
+    main("I am shiun", [])

@@ -1,0 +1,38 @@
+{
+  "package": {},
+  "code": {
+    "chat.jinja2": {
+      "type": "llm",
+      "inputs": {
+        "chat_history": {
+          "type": [
+            "string"
+          ]
+        },
+        "question": {
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "source": "chat.jinja2"
+    },
+    "is_question_relevant.py": {
+      "type": "python",
+      "inputs": {
+        "query": {
+          "type": [
+            "string"
+          ]
+        },
+        "chat_history": {
+          "type": [
+            "object"
+          ]
+        }
+      },
+      "source": "is_question_relevant.py",
+      "function": "main"
+    }
+  }
+}
