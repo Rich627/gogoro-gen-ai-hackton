@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS SAM Template for gogoro-hackthon
+Resources:
+  DataSourceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Fn::Sub: gogoro-hackton-data-${AWS::AccountId}-${AWS::Region}
+  DataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      PackageType: Image
+      Architectures:
+      - x86_64
+      Events:
+        DataSourceBucket:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: DataSourceBucket
+            Events: s3:ObjectCreated:*
+      Policies:
+      - S3ReadPolicy:
+          BucketName:
+            Fn::Sub: gogoro-hackton-data-${AWS::AccountId}-${AWS::Region}
+      ImageUri: datafunction:python3.11-v1
+    Metadata:
+      DockerContext: C:\GitHub\gogoro-hackathon\src
+      DockerTag: python3.11-v1
+      Dockerfile: Dockerfile
+      SamResourceId: DataFunction

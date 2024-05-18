@@ -1,0 +1,48 @@
+service: image-processor
+
+provider:
+  name: aws
+  profile: gen-ai
+  runtime: python3.11
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "*"
+      Resource:
+        - "arn:aws:s3:::gogoro-hackton-data/*"
+        - "arn:aws:s3:::gogoro-hackton-data-source/*"
+    - Effect: "Allow"
+      Action:
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+      Resource: "*"
+
+functions:
+  ProcessImages:
+    handler: data.lambda_handler
+    events:
+      - s3:
+          bucket: gogoro-hackton-data
+          existing: true
+          event: s3:ObjectCreated:*
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+    layer:
+      name: ${self:provider.stage}-pillow-layer
+      description: "Python requirements layer including Pillow"
+      compatibleRuntimes:
+        - python3.11
+    fileName: requirements.txt
+  serverless-layers:
+    layersDeploymentBucket: gogoro-hackton-lambda-layer
+
+plugins:
+  - serverless-python-requirements
+  - serverless-layers
