@@ -2,24 +2,15 @@
 name = "gogoro-hackathon"
 version = "0.1.0"
 description = ""
-authors = ["Rich627 <rich.liu0912@hotmail.com>"]
+authors = ["sh1un <a0923183408@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.11"
-boto3 = "^1.34.107"
-langchain = "^0.1.20"
-pypdf = "^4.2.0"
-chromadb = "^0.5.0"
-faiss-cpu = "^1.8.0"
-ollama = "^0.2.0"
-pypdf2 = "^3.0.1"
-pdfplumber = "^0.11.0"
-pip = "^24.0"
+boto3 = "^1.34.108"
 fitz = "^0.0.1.dev2"
-frontend = "^0.0.3"
-tools = "^0.1.9"
 pymupdf = "^1.24.4"
+requests = "^2.31.0"
 
 
 [build-system]
