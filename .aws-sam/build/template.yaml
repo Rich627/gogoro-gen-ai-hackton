@@ -2,52 +2,32 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: AWS SAM Template for gogoro-hackthon
 Resources:
-  IsQuestionRelevantApi:
-    Type: AWS::Serverless::Api
+  DataSourceBucket:
+    Type: AWS::S3::Bucket
     Properties:
-      StageName: dev
-  IsQuestionRelevantFunction:
+      BucketName:
+        Fn::Sub: gogoro-hackton-data-${AWS::AccountId}-${AWS::Region}
+  DataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/is_question_relevant_function
+      CodeUri: src/
       PackageType: Image
       Architectures:
       - x86_64
       Events:
-        ApiEvent:
-          Type: Api
+        DataSourceBucket:
+          Type: S3
           Properties:
-            Path: /is_question_relevant
-            Method: POST
-            RestApiId:
-              Ref: IsQuestionRelevantApi
+            Bucket:
+              Ref: DataSourceBucket
+            Events: s3:ObjectCreated:*
       Policies:
-      - AmazonBedrockFullAccess
-      - DynamoDBCrudPolicy:
-          TableName: session_table
-      - Statement:
-        - Effect: Allow
-          Action:
-          - ssm:GetParameter
-          - ssm:DescribeParameters
-          Resource:
-          - Fn::Sub: arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/OPENSEARCH_ENDPOINT
-          - Fn::Sub: arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/OPENSEARCH_USERNAME
-          - Fn::Sub: arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/OPENSEARCH_PASSWORD
-      - Statement:
-        - Effect: Allow
-          Action:
-          - kms:Decrypt
-          Resource:
-            Fn::Sub: arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/ssm
-      ImageUri: isquestionrelevantfunction:python3.11-v1
+      - S3ReadPolicy:
+          BucketName:
+            Fn::Sub: gogoro-hackton-data-${AWS::AccountId}-${AWS::Region}
+      ImageUri: datafunction:python3.11-v1
     Metadata:
-      DockerContext: /Users/rich/Desktop/gogoro-hackathon/src/is_question_relevant_function
+      DockerContext: C:\GitHub\gogoro-hackathon\src
       DockerTag: python3.11-v1
       Dockerfile: Dockerfile
-      SamResourceId: IsQuestionRelevantFunction
-Outputs:
-  IsQuestionRelevantApi:
-    Description: Is Question Relevant API Endpoint URL
-    Value:
-      Fn::Sub: https://${IsQuestionRelevantApi}.execute-api.${AWS::Region}.amazonaws.com/dev/is_question_relevant
+      SamResourceId: DataFunction

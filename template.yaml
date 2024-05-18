@@ -23,7 +23,7 @@ Resources:
       #     TODAM_TABLE_NAME: !Ref DynamoDBTable
       #     PARSE_IMAGE_LAMBDA_FUNCTION_NAME: !Ref ParseImageFunction
       Architectures:
-        - arm64
+        - x86_64
       Events:
         DataSourceBucket:
           Type: S3

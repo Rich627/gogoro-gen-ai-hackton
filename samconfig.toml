@@ -17,9 +17,9 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
-s3_prefix = "gogoro-hackathon"
+s3_prefix = "pdfpreprocessing"
 region = "us-east-1"
-image_repositories = ["IsQuestionRelevantFunction=232958563315.dkr.ecr.us-east-1.amazonaws.com/gogorohackathon93166642/isquestionrelevantfunction80bcf5d8repo"]
+image_repositories = ["DataFunction=232958563315.dkr.ecr.us-east-1.amazonaws.com/pdfpreprocessing6674d6f2/datafunction45a4c58erepo"]
 
 [default.package.parameters]
 resolve_s3 = true
