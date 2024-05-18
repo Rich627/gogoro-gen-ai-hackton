@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS SAM Template for gogoro-hackthon
+
+Resources:
+  DataSourceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "gogoro-hackton-data-${AWS::AccountId}-${AWS::Region}"
+  
+  
+  DataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      PackageType: Image
+      # Handler: data.lambda_handler
+      # Environment:
+      #   Variables:
+      #     S3_BUCKET: !Sub "gogoro-hackton-data-${AWS::AccountId}-${AWS::Region}"
+      #     VERIFY_REGISTRATION_API_URL: !Ref VerifyRegistrationApi
+      #     PARSE_IMAGE_FIFO_QUEUE_URL: !Ref ParseImageFifoQueue
+      #     TODAM_TABLE_NAME: !Ref DynamoDBTable
+      #     PARSE_IMAGE_LAMBDA_FUNCTION_NAME: !Ref ParseImageFunction
+      Architectures:
+        - arm64
+      Events:
+        DataSourceBucket:
+          Type: S3
+          Properties:
+            Bucket: !Ref DataSourceBucket
+            Events: s3:ObjectCreated:*
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub "gogoro-hackton-data-${AWS::AccountId}-${AWS::Region}"
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: src/
+      DockerTag: python3.11-v1
+
+# Outputs:
+  # IsQuestionRelevantApi:
+  #   Description: "Is Question Relevant API Endpoint URL"
+  #   Value: !Sub "https://${IsQuestionRelevantApi}.execute-api.${AWS::Region}.amazonaws.com/dev/is_question_relevant"
